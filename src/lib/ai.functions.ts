@@ -121,7 +121,7 @@ export const chatSend = createServerFn({ method: "POST" })
     }).parse(d),
   )
   .handler(async ({ data, context }) => {
-    const { supabase, userId } = context;
+    const { userId } = context; const supabase = context.supabase as any;
 
     // Verify conversation belongs to user
     const { data: conv, error: convErr } = await supabase
@@ -183,7 +183,7 @@ export const chatSend = createServerFn({ method: "POST" })
 export const createConversation = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { supabase, userId } = context;
+    const { userId } = context; const supabase = context.supabase as any;
     const { data, error } = await supabase
       .from("conversations" as never)
       .insert({ user_id: userId, title: "New conversation" })
