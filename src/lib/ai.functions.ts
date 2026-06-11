@@ -139,7 +139,7 @@ export const chatSend = createServerFn({ method: "POST" })
       .order("created_at", { ascending: true });
 
     // Insert user message
-    await supabase.from("messages" as never).insert({
+    await (supabase as any).from("messages" as never).insert({
       conversation_id: data.conversationId,
       user_id: userId,
       role: "user",
@@ -161,7 +161,7 @@ export const chatSend = createServerFn({ method: "POST" })
     const reply = await generateCompletion({ messages });
 
     // Save assistant reply
-    await supabase.from("messages" as never).insert({
+    await (supabase as any).from("messages" as never).insert({
       conversation_id: data.conversationId,
       user_id: userId,
       role: "assistant",
@@ -172,9 +172,9 @@ export const chatSend = createServerFn({ method: "POST" })
     const title = (conv as { title: string }).title;
     if (title === "New conversation") {
       const newTitle = data.message.slice(0, 60).replace(/\s+/g, " ").trim();
-      await supabase.from("conversations" as never).update({ title: newTitle, updated_at: new Date().toISOString() }).eq("id", data.conversationId);
+      await (supabase as any).from("conversations" as never).update({ title: newTitle, updated_at: new Date().toISOString() }).eq("id", data.conversationId);
     } else {
-      await supabase.from("conversations" as never).update({ updated_at: new Date().toISOString() }).eq("id", data.conversationId);
+      await (supabase as any).from("conversations" as never).update({ updated_at: new Date().toISOString() }).eq("id", data.conversationId);
     }
 
     return { reply };
